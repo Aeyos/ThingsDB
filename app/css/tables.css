@@ -1,0 +1,24 @@
+thead {
+	border-bottom: 3px solid #191919;
+}
+th, td {
+	padding: 10px 30px;
+}
+tr:nth-child(even) {
+	background-color: rgba(0,0,0,.028);
+}
+
+td.actions {
+	text-align: center;
+}
+
+tfoot {
+	border-top: 1px solid #191919;
+}
+
+tfoot input {
+	border: none;
+	border-bottom: 1px solid #191919;
+	padding: 10px;
+	width: 120%;
+}

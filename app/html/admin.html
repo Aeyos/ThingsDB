@@ -1,0 +1,80 @@
+<div><!--  ng-controller="tagsController as tags"> -->
+	<div class="container">
+		<h1><i class="fa fa-tasks"></i>&nbsp&nbsp{{title}}</h1>
+		<hr/>
+	<!-- TABLES SECTION -->
+		<h2>Tables</h2>
+		<h3><button class="action-button text-button" ng-click="masterReset()">Master Reset</button></h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Fields</th>
+					<th>Count</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="table in tables">
+					<td>{{table.name}}</td>
+					<td><span ng-repeat="field in table.fields">{{field}}{{!$last?' , ':''}}</span></td>
+					<td>{{table.count}}</td>
+					<td class="actions">
+						<!-- <button class="action-button" ng-click="initTables(tables)"><span class="fa fa-play"></span></button> -->
+						<!-- <button class="action-button" ng-click="closeTables(tables)"><span class="fa fa-stop"></span></button> -->
+						<button class="action-button" ng-click="dropTable(table.name)"><span class="fa fa-times"></span></button>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td><input placeholder="Name" ng-model="Name"></td>
+					<td><input placeholder="Fields" ng-model="Fields"></td>
+					<td class="actions"><button class="action-button" ng-click="createTable(Name, Fields)"><span class="fa fa-plus"></span></button></td>
+				</tr>
+			</tfoot>
+		</table>
+	<!-- TABLE CONTENTS SECTION -->
+		<h2>Content</h2>
+		<h3>
+			<span class="fa fa-chevron-right"></span>
+			<select ng-options="table as table.name for table in tables" ng-model="currentTable" ng-change="getAll(currentTable.name)"></select>
+		</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th ng-repeat="field in currentTable.fields">{{field}}</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="!currentTable || !selectedTableData || selectedTableData.length <= 0">
+					<td> - - - - </td>
+					<td ng-repeat="field in currentTable.fields"> - - - - </td>
+					<td> - - - - </td>
+				</tr>
+				<tr ng-repeat="data in selectedTableData" ng-hide="!currentTable || !selectedTableData || selectedTableData.length <= 0">
+					<td>{{data.id}}</td>
+					<td ng-repeat="field in currentTable.fields">{{data[field]}}</td>
+					<td class="actions">
+						<!-- <button class="action-button" ng-click="initTables(tables)"><span class="fa fa-play"></span></button> -->
+						<button class="action-button" ng-click=""><span class="fa fa-pencil-square-o"></span></button>
+						<button class="action-button" ng-click="delete(currentTable.name, data.id)"><span class="fa fa-times"></span></button>
+					</td>
+				</tr>
+			</tbody>
+			<!-- <tfoot>
+				<tr>
+					<td>
+					</td>
+					<td class="actions"><button class="action-button" ng-click="createTable(Name)"><span class="fa fa-plus"></span></button></td>
+				</tr>
+			</tfoot> -->
+		</table>
+		<span ng-repeat="field in currentTable.fields">
+			<input class="slik-input" placeholder="{{field}}" ng-model="formValues[$index]">
+		</span>
+		<button ng-hide="!currentTable" class="action-button" ng-click="insertValue(currentTable.name, formValues, currentTable.fields)"><span class="fa fa-plus"></span></button>
+	</div>
+</div>

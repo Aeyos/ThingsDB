@@ -1,0 +1,24 @@
+<div><!--  ng-controller="tagsController as tags"> -->
+	<div class="container">
+		<h1><i class="fa fa-tags"></i>&nbsp&nbsp{{title}}</h1>
+		<hr/>
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Subtags</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="i in tags">
+					<td>{{i.id}}</td>
+					<td>{{i.name}}</td>
+					<td>{{i.subtags}}</td>
+				</tr>
+			</tbody>
+		</table>
+		<ul>
+		</ul>
+	</div>
+</div>

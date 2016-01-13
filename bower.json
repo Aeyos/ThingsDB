@@ -1,0 +1,25 @@
+{
+  "name": "ThingsDB",
+  "authors": [
+    "Aeyos <vinicius.m.negrao@hotmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~2.1.4",
+    "angular": "angularjs#~1.4.8",
+    "bootstrap": "~3.3.6",
+    "angular-route": "~1.4.8",
+    "font-awesome": "~4.5.0"
+  }
+}

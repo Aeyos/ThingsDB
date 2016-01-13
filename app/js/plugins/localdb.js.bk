@@ -1,0 +1,146 @@
+angular.module('localdb', []).
+	factory('localdb', ['$q', function ($q) {
+		var ready = false;
+		var database = {
+			db : null,
+			version : 5,
+			tables : ['tags','stuff'],
+			insert : function (table, data, onready, multiple=false) {
+				var transaction = this.db.transaction([table], 'readwrite');
+				transaction.oncomplete = function (e) {
+					console.log('DB Insert success (obj, table, data) :', this, table, data);
+				};
+				transaction.onerror = function (e) {
+					console.error('DB Insert error (obj, table, data) :', this, table, data);
+				};
+				var objectStore = transaction.objectStore(table);
+				if(multiple) {
+					alert('not implemented');
+				} else {
+					var request = objectStore.add(data);
+					request.onsuccess = function(event) { };
+					request.onerror = function(event) { console.error('DB Insert request error') };
+				}
+			},
+			get : function (table, ID, onready) {
+				var request = this.db.transaction([table]).objectStore(table).get(ID);
+				request.onsuccess = function (e) {
+					if(!request.result) request.onerror({msg:'Nothing found'});
+					onready(request.result);
+				};
+				request.onerror = function (e) {
+					console.error('DB Get error :\nDatabase - ', this, '\nTable name - ', table, '\nID - ', ID, '\nError - ', e);
+				};
+			},
+			getAll : function (table, onready) {
+				var results = [];
+				this.db.transaction(table,'readonly').objectStore(table).openCursor().onsuccess = function (event) {
+					var cursor, e, target;
+					cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+						cursor.value.id = cursor.key;
+						results.push(data);
+						cursor.continue();
+					} else {
+						onready(results);
+					}
+				}
+			},
+			delete : function (table, ID) {
+				var request = this.db.transaction(table,'readwrite').objectStore(table).delete(ID);
+				request.onsuccess = function (e) { };
+				request.onerror = function (e) {
+					console.error('DB Delete error :\nDatabase - ', this, '\nTable name - ', table, '\nID - ', ID, '\nError - ', e);
+				};
+			}
+		};
+		return {
+			init : function (name, onready) {
+				var deferred = $q.defer();
+				console.log('Setting up DB');
+				try {
+					var request = indexedDB.open(name, database.version);
+					request.onupgradeneeded = function (e) {
+						console.log('Upgrade needed');
+						database.db = e.target.result;
+						for(var table in database.tables) {
+							table = database.tables[table];
+							var objectStore =database.db.createObjectStore(table, { autoIncrement : true });
+							objectStore.createIndex('name', 'name', { unique: false });
+						}
+						ready = true;
+						if(onready) onready();
+						deferred.resolve();
+					};
+					request.onsuccess = function (e) {
+						console.log('DB Created successfully', e.target.result);
+						database.db = e.target.result;
+						database.db.onerror = function (e) {
+							console.error('DB Error (obj,e) :', obj, e);
+						};
+						ready = true;
+						if(onready) onready();
+						deferred.resolve();
+					};
+					request.onerror = function (e) {
+						throw e;
+					};
+				} catch (e) {
+					console.error('DB create error :',e);
+				}
+				return deferred.promise;
+			},
+			insert : function (table, data) {
+				var deferred = $q.defer();
+				if(!ready) {
+					this.init('AngularDB', function () {
+						database.insert(table, data, function(result) {
+							deferred.resolve(result);
+						})
+					});
+				}
+				return deferred.promise;
+			},
+			get : function (table, ID) {
+				var deferred = $q.defer();
+				if(!ready) {
+					console.log('DB not ready');
+					this.init('AngularDB', function () {
+						console.log('deferring on get');
+						database.get(table, ID, function(result) {
+							console.log('resolving on get');
+							deferred.resolve(result);
+						})
+					});
+				} else {
+					console.log('deferring on get');
+					database.get(table, ID, function(result) {
+						console.log('resolving on get');
+						deferred.resolve(result);
+					})
+				}
+				return deferred.promise;
+			},
+			getAll : function (table) {
+				var deferred = $q.defer();
+				if(!ready) {
+					console.log('DB not ready');
+					this.init('AngularDB', function () {
+						console.log('deferring on get');
+						database.getAll(table, function(result) {
+							console.log('resolving on get');
+							deferred.resolve(result);
+						})
+					});
+				} else {
+					console.log('deferring on get');
+					database.getAll(table, function(result) {
+						console.log('resolving on get');
+						deferred.resolve(result);
+					})
+				}
+				return deferred.promise;
+			}
+		}
+	}]);

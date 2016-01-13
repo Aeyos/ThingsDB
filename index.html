@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="main" ng-controller="coreController as core">
+	<head>
+		<title>{{appName}}</title>
+		<!-- JQUERY -->
+		<script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
+		<!-- ANGULAR -->
+		<script type="text/javascript" src="../bower_components/angular/angular.js"></script>
+		<script type="text/javascript" src="../bower_components/angular-route/angular-route.js"></script>
+		<!-- BOOTSTRAP -->
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+		<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<!-- FONT-AWESOME -->
+		<link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+		<!-- JS EXTENSION -->
+		<script type="text/javascript" src="app/js/js_extension.js"></script>
+
+		<!-- STYLES -->
+		<link rel="stylesheet" type="text/css" href="app/css/globals.css">
+		<link rel="stylesheet" type="text/css" href="app/css/index.css">
+		<link rel="stylesheet" type="text/css" href="app/css/tables.css">
+		<link rel="stylesheet" type="text/css" href="app/css/buttons.css">
+		<link rel="stylesheet" type="text/css" href="app/css/inputs.css">
+
+		<!-- CONTROLLERS -->
+		<script type="text/javascript" src="app/js/main.js"></script>
+		<script type="text/javascript" src="app/js/controllers/core.js"></script>
+		<script type="text/javascript" src="app/js/controllers/index.js"></script>
+		<script type="text/javascript" src="app/js/controllers/tags.js"></script>
+		<script type="text/javascript" src="app/js/controllers/routes.js"></script>
+		<script type="text/javascript" src="app/js/controllers/admin.js"></script>
+		<!-- SERVICES -->
+		<script type="text/javascript" src="app/js/plugins/localdb.js"></script>
+		<script type="text/javascript" src="app/js/plugins/localstorage.js"></script>
+	</head>
+	<body>
+		<div ng-include="'app/html/header.html'"></div>
+		<script type="text/javascript">
+			var APIs = ['$','angular','$().modal'];
+
+			for(var i in APIs) {
+				i = APIs[i];
+				if(eval ('typeof '+i) !== 'undefined') {
+					console.log(i+' : OK!');
+				} else {
+					console.log(i+' : undefined');
+				}
+			}
+		</script>
+		<!-- BREADCRUMBS -->
+		<div class="container breadCrumbs">
+			<!-- <span ng-repeat="link in breadCrumb"><a href="{{link.url}}">{{link.name}}</a>{{!$last?' >  ':''}}</span> -->
+		</div>
+		<!-- PAGE VIEW -->
+		<div ng-view></div>
+	</body>
+</html>

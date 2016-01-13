@@ -1,0 +1,15 @@
+select {
+	border: none;
+	border-bottom: 1px solid #191919;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	padding: 5px 20px;
+}
+
+.slik-input {
+	border: none;
+	border-bottom: 1px solid #191919;
+	padding: 10px;
+	margin-right: 10px;
+	width: auto;
+}
